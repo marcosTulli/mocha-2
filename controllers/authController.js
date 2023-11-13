@@ -12,7 +12,7 @@ function authController() {
 
   function isAuthorized(neededRole) {
     if (user) {
-      return roles.indexOf(neededRole);
+      return user.isAuthorized(neededRole);
     }
   }
 

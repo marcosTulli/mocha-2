@@ -9,10 +9,6 @@ const sinon = require('sinon');
 chai.use(chaiAsPromised);
 chai.should();
 
-beforeEach(function settingUpRoles() {
-  authController.setRoles(['user']);
-});
-
 describe(' - AuthController', function () {
   describe.only('\n - isAuthorized:\n', function () {
     let user = {};
