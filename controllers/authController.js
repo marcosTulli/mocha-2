@@ -1,8 +1,13 @@
 function authController() {
   let roles;
+  let user;
 
   function setRoles(role) {
     roles = role;
+  }
+
+  function setUser(inUser) {
+    user = inUser;
   }
 
   function isAuthorized(neededRole) {
@@ -28,7 +33,7 @@ function authController() {
     // res.render('index');
   }
 
-  return { isAuthorized, isAuthorizedAsync, setRoles, isAuthorizedPromise, getIndex };
+  return { isAuthorized, isAuthorizedAsync, setRoles, isAuthorizedPromise, getIndex, setUser };
 }
 
 module.exports = authController();
