@@ -11,7 +11,9 @@ function authController() {
   }
 
   function isAuthorized(neededRole) {
-    return roles.indexOf(neededRole) >= 0;
+    if (user) {
+      return roles.indexOf(neededRole);
+    }
   }
 
   function isAuthorizedAsync(neededRole, cb) {

@@ -5,6 +5,7 @@ const should = require('chai').should();
 const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
 const sinon = require('sinon');
+
 chai.use(chaiAsPromised);
 chai.should();
 
@@ -13,17 +14,32 @@ beforeEach(function settingUpRoles() {
 });
 
 describe(' - AuthController', function () {
-  describe.skip('\nisAuthorized:\n', function () {
-    it('- Should return false if not authorized', function () {
-      const isAuth = authController.isAuthorized('admin');
-      expect(isAuth).to.be.false;
-      // assert.equal(false, authController.isAuthorized('admin'));
+  describe.only('\n - isAuthorized:\n', function () {
+    let user = {};
+
+    beforeEach(function () {
+      user = {
+        roles: ['user'],
+        isAuthorized: (neededRole) => {
+          return this.roles.indexOf(neededRole) >= 0;
+        },
+      };
+      sinon.spy(user, 'isAuthorized');
+      authController.setUser(user);
     });
+
+    it.only('\n- Should return false if not authorized', function () {
+      const isAuth = authController.isAuthorized('admin');
+      console.log(user);
+      expect(isAuth).to.be.false;
+    });
+
     it('- Should return true if  authorized', function () {
       authController.setRoles(['user', 'admin']);
       const isAuth = authController.isAuthorized('admin');
       isAuth.should.be.true;
     });
+
     it('- Should not allow a get if not authorized');
     it('- Should allow a get if  authorized');
   });
