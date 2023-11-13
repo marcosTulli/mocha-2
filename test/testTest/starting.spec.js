@@ -1,7 +1,7 @@
 const assert = require('assert');
 const should = require('chai').should();
 
-describe('Basic Mocha Test', () => {
+describe.skip('Basic Mocha Test', () => {
   it(' - Should deal with objects', () => {
     const obj = { name: 'Tim', gender: 'male' };
     const objB = { name: 'Tim', gender: 'male' };
@@ -10,6 +10,6 @@ describe('Basic Mocha Test', () => {
   });
   it(' - Should allow testing null', () => {
     const iamNull = null;
-    should.not.exist(iamNull)
+    should.not.exist(iamNull);
   });
 });

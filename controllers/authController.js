@@ -23,7 +23,12 @@ function authController() {
     });
   }
 
-  return { isAuthorized, isAuthorizedAsync, setRoles, isAuthorizedPromise };
+  function getIndex(req, res) {
+    res.render('index');
+    // res.render('index');
+  }
+
+  return { isAuthorized, isAuthorizedAsync, setRoles, isAuthorizedPromise, getIndex };
 }
 
 module.exports = authController();

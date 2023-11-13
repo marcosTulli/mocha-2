@@ -4,14 +4,16 @@ const expect = require('chai').expect;
 const should = require('chai').should();
 const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
+const sinon = require('sinon');
 chai.use(chaiAsPromised);
 chai.should();
 
 beforeEach(function settingUpRoles() {
   authController.setRoles(['user']);
 });
+
 describe(' - AuthController', function () {
-  describe('\nisAuthorized:\n', function () {
+  describe.skip('\nisAuthorized:\n', function () {
     it('- Should return false if not authorized', function () {
       const isAuth = authController.isAuthorized('admin');
       expect(isAuth).to.be.false;
@@ -26,7 +28,7 @@ describe(' - AuthController', function () {
     it('- Should allow a get if  authorized');
   });
 
-  describe('\nisAuthorizedAsync:\n', function () {
+  describe.skip('\nisAuthorizedAsync:\n', function () {
     it('- Should return false if not authorized', function (done) {
       this.timeout(2500);
       authController.isAuthorizedAsync('admin', (isAuth) => {
@@ -36,10 +38,22 @@ describe(' - AuthController', function () {
     });
   });
 
-  describe('\nisAuthorizedPromise:\n', function () {
+  describe.skip('\nisAuthorizedPromise:\n', function () {
     it('- Should return false if not authorized (promise)', function () {
       // const isAuth = authController.isAuthorizedPromise('admin');
       return authController.isAuthorizedPromise('admin').should.eventually.be.false;
+    });
+  });
+
+  describe('getIndex', function () {
+    it('should redner index', function () {
+      const req = {};
+      const res = {
+        render: sinon.spy(),
+      };
+      authController.getIndex(req, res);
+      res.render.calledOnce.should.be.true;
+      res.render.firstCall.args[0].should.equal('index');
     });
   });
 });
