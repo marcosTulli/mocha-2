@@ -13,6 +13,8 @@ function authController() {
   function isAuthorized(neededRole) {
     if (user) {
       return user.isAuthorized(neededRole);
+    } else if (roles.indexOf(neededRole) >= 0) {
+      return true;
     }
   }
 
@@ -31,8 +33,14 @@ function authController() {
   }
 
   function getIndex(req, res) {
-    res.render('index');
-    // res.render('index');
+    try {
+      if (req.user.isAuthorized('admin')) {
+        return res.render('index');
+      }
+      res.render('Not Authorized');
+    } catch (error) {
+      res.render('error');
+    }
   }
 
   return { isAuthorized, isAuthorizedAsync, setRoles, isAuthorizedPromise, getIndex, setUser };

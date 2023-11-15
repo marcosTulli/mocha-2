@@ -10,13 +10,13 @@ chai.use(chaiAsPromised);
 chai.should();
 
 describe(' - AuthController', function () {
-  describe.only('\n - isAuthorized:\n', function () {
+  describe('\n - isAuthorized:\n', function () {
     let user = {};
 
     beforeEach(function () {
       user = {
         roles: ['user'],
-        isAuthorized: (neededRole) => {
+        isAuthorized: function (neededRole) {
           return this.roles.indexOf(neededRole) >= 0;
         },
       };
@@ -24,9 +24,8 @@ describe(' - AuthController', function () {
       authController.setUser(user);
     });
 
-    it.only('\n- Should return false if not authorized', function () {
+    it('\n- Should return false if not authorized', function () {
       const isAuth = authController.isAuthorized('admin');
-      console.log(user);
       expect(isAuth).to.be.false;
     });
 
@@ -40,7 +39,7 @@ describe(' - AuthController', function () {
     it('- Should allow a get if  authorized');
   });
 
-  describe.skip('\nisAuthorizedAsync:\n', function () {
+  describe('\nisAuthorizedAsync:\n', function () {
     it('- Should return false if not authorized', function (done) {
       this.timeout(2500);
       authController.isAuthorizedAsync('admin', (isAuth) => {
@@ -50,22 +49,38 @@ describe(' - AuthController', function () {
     });
   });
 
-  describe.skip('\nisAuthorizedPromise:\n', function () {
+  describe('\nisAuthorizedPromise:\n', function () {
     it('- Should return false if not authorized (promise)', function () {
       // const isAuth = authController.isAuthorizedPromise('admin');
       return authController.isAuthorizedPromise('admin').should.eventually.be.false;
     });
   });
 
-  describe('getIndex', function () {
-    it('should redner index', function () {
-      const req = {};
-      const res = {
-        render: sinon.spy(),
+  describe.only('getIndex', function () {
+    let user = {};
+    beforeEach(function () {
+      user = {
+        roles: ['user'],
+        isAuthorized: function (neededRole) {
+          return this.roles.indexOf(neededRole) >= 0;
+        },
       };
+    });
+
+    it(' - Should render index if authorized', function () {
+      const isAuth = sinon.stub(user, 'isAuthorized').returns(true);
+      const req = { user: user };
+      const res = {
+        render: function () {},
+      };
+      const mock = sinon.mock(res);
+      mock.expects('render').once().withExactArgs('index');
+
       authController.getIndex(req, res);
-      res.render.calledOnce.should.be.true;
-      res.render.firstCall.args[0].should.equal('index');
+      isAuth.calledOnce.should.be.true;
+      mock.verify();
+      // res.render.calledOnce.should.be.true;
+      // res.render.firstCall.args[0].should.equal('index');
     });
   });
 });
